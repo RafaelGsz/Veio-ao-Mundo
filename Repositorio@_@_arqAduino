@@ -1,0 +1,223 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd (8,9,4,5,6,7);
+int leitura=0;
+bool botao=0;
+bool upDown=0;
+bool select=0;
+bool trava=0;
+bool select1=0;
+bool trava1=0;
+
+int ledPin1=44;
+int ledPin2=46;
+int brilho=0;
+int brilho1=0;
+int anterior=0;
+int anterior1=0;
+float var=0;
+float var1=0;
+float multiplic=2.55;
+
+void setup() 
+{
+  lcd.begin(16,2);
+  lcd.setCursor(0,0);
+  lcd.print(" Led 01 OFF");
+  lcd.setCursor(0,1);
+  lcd.print(" Led 02 OFF");
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
+}
+
+void loop() 
+{
+  leitura = analogRead (A0);
+    
+    
+ /////////////////////DOWN BUTTON //////////////////////////   
+    
+    if (leitura>250 && leitura<350) //Botão DOWN
+  {
+    upDown = 0;
+  }
+    if (upDown == 0)
+    {
+    lcd.setCursor(0,0);
+    lcd.print(" ");
+    lcd.setCursor(0,1);
+    lcd.print(">");
+ 
+//-----------------------------------------------------------//  
+  if(select==0)
+  {
+    lcd.setCursor(8,1); /////// Parte que define o que vai desligar
+    lcd.print("OFF");
+    digitalWrite(ledPin1, LOW);
+
+    if(leitura==1023)
+    {
+      trava=1;
+    }
+    if(trava==1)
+    {
+      if(leitura>600 && leitura<800)
+      {
+        select=1;
+      }
+    }
+  }
+
+
+   if(select==1)
+  {
+    lcd.setCursor(8,1);
+    lcd.print("ON    ");  ///// Parte que define o que vai Ligar
+    digitalWrite(ledPin1, HIGH);
+    analogWrite(ledPin1, var);///////////////////////////////////////
+    lcd.setCursor(14,1);
+    lcd.print(" %"); 
+    lcd.setCursor(12,1);      ///////////////////////////////////////
+    lcd.print(brilho);         
+      if (brilho < 100)       
+  {
+//////////////adiciona////////////////
+  if (leitura>450 && leitura<500)
+  {
+    if (anterior != brilho)
+    {
+    brilho = brilho+10;
+    anterior = brilho;
+    }
+    var = brilho * multiplic;
+  }
+    if (leitura == 1023)
+    {
+     anterior = anterior+5;
+    }
+  }
+///////////////subtrai///////////////
+  if (brilho >0)
+  {
+     if (leitura==0)
+  {
+    if (anterior != brilho)
+    {
+    brilho = brilho-10;
+    anterior = brilho;
+    }
+    var = brilho * multiplic;
+  }
+    if (leitura == 1023)
+    {
+     anterior = anterior+5;
+    }
+  }
+
+    if(leitura==1023)
+    {
+      trava=0;
+    }
+    if(trava==0)
+    {
+      if(leitura>600 && leitura<800)
+      {
+        select=0;
+      }
+    }
+  }
+    
+  }
+  
+///////////////////////UP BUTTON //////////////////////////
+    
+    if (leitura>50 && leitura<200) //Botão UP
+  {
+    upDown = 1;
+  }
+    if (upDown == 1)
+    {
+    lcd.setCursor(0,0);
+    lcd.print(">");
+    lcd.setCursor(0,1);
+    lcd.print(" ");
+
+//--------------------------------------------------------------//
+    if(select1==0)
+  {
+    lcd.setCursor(8,0); ////// Parte onde é definido o que vai Desligar
+    lcd.print("OFF");
+    digitalWrite(ledPin2, LOW);
+
+    if(leitura==1023)
+    {
+      trava1=1;
+    }
+    if(trava1==1)
+    {
+      if(leitura>600 && leitura<800)
+      {
+        select1=1;
+      }
+    }
+  }
+
+  
+   if(select1==1)
+  {
+    lcd.setCursor(8,0);  ////// Parte onde é definido o que vai ligar
+    lcd.print("ON    ");
+    digitalWrite(ledPin2, HIGH);
+    analogWrite(ledPin2, var1);
+    lcd.setCursor(14,0);
+    lcd.print(" %"); 
+    lcd.setCursor(12,0);      ///////////////////////////////////////
+    lcd.print(brilho1);  
+      if (brilho1 < 100)
+  {
+//////////////adiciona////////////////
+  if (leitura>450 && leitura<500)
+  {
+    if (anterior1 != brilho1)
+    {
+    brilho1 = brilho1+10;
+    anterior1 = brilho1;
+    }
+    var1 = brilho1 * multiplic;
+  }
+    if (leitura == 1023)
+    {
+     anterior1 = anterior1+5;
+    }
+  }
+///////////////subtrai///////////////
+  if (brilho1 >0)
+  {
+     if (leitura==0)
+  {
+    if (anterior1 != brilho1)
+    {
+    brilho1 = brilho1-10;
+    anterior1 = brilho1;
+    }
+    var1 = brilho1 * multiplic;
+  }
+    if (leitura == 1023)
+    {
+     anterior1 = anterior1+5;
+    }
+  }
+
+    if(leitura==1023)
+    {
+      trava1=0;
+    }
+    if(trava1==0)
+    {
+      if(leitura>600 && leitura<800)
+      {
+        select1=0;
+      }
+    }
+  }
+    }
+}
